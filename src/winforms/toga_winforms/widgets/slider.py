@@ -37,3 +37,12 @@ class Slider(Widget):
 
     def set_on_slide(self, handler):
         pass
+
+    @property
+    def continuous(self):
+        return True
+
+    @continuous.setter
+    def continuous(self, continuous):
+        raise RuntimeError('Continuous not supported on Windows')
+        # Use OnMouseUp instead of on_slide

@@ -41,3 +41,11 @@ class Slider(Widget):
     def set_on_slide(self, handler):
         # No special handling required
         pass
+
+    @property
+    def continuous(self):
+        return self.native.continuous
+
+    @continuous.setter
+    def continuous(self, continuous):
+        self.native.continuous = continuous

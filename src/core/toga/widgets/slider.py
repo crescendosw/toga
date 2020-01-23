@@ -83,3 +83,16 @@ class Slider(Widget):
     def on_slide(self, handler):
         self._on_slide = wrapped_handler(self, handler)
         self._impl.set_on_slide(self._on_slide)
+
+    @property
+    def continuous(self):
+        """ A Boolean indicating whether sliding the slider generates continuous update events.
+
+        Returns:
+            (bool) True if enabled, False if disabled.
+        """
+        return self._impl.continuous
+
+    @continuous.setter
+    def continuous(self, continuous):
+        self._impl.continuous = continuous
