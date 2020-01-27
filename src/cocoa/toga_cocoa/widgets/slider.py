@@ -24,14 +24,14 @@ class Slider(Widget):
         self.add_constraints()
 
     def get_value(self):
-        return self.native.floatValue
+        return self.native.doubleValue
 
     def set_value(self, value):
-        self.native.doubleValue = self.interface.value
+        self.native.doubleValue = value
 
     def set_range(self, range):
-        self.native.minValue = self.interface.range[0]
-        self.native.maxValue = self.interface.range[1]
+        self.native.minValue = range[0]
+        self.native.maxValue = range[1]
 
     def rehint(self):
         content_size = self.native.intrinsicContentSize()

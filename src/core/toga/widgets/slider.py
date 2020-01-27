@@ -24,33 +24,21 @@ class Slider(Widget):
         self._impl = self.factory.Slider(interface=self)
 
         self.range = range
-        self.value = default
+        if default:
+            self.value = default
         self.on_slide = on_slide
         self.enabled = enabled
 
     @property
     def value(self):
-        """ Current slider value.
-
-        Returns:
-            The current slider value as a ``float``.
-
-        Raises:
-            ValueError: If the new value is not in the range of min and max.
-        """
-        self._value = self._impl.get_value()
-        return self._value
+        return self._impl.get_value()
 
     @value.setter
     def value(self, value):
-        _min, _max = self.range
-        if value is None:
-            self._value = 0.5
-        elif _min <= value <= _max:
-            self._value = value
-        else:
-            raise ValueError('Slider value ({}) is not in range ({}-{})'.format(value, _min, _max))
-        self._impl.set_value(self._value)
+        min, max = self.range
+        if not (min <= value <= max):
+            raise ValueError('Slider value ({}) is not in range ({}-{})'.format(value, min, max))
+        self._impl.set_value(value)
 
     @property
     def range(self):
