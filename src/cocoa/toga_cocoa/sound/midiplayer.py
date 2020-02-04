@@ -1,4 +1,6 @@
 from toga_cocoa.libs import AVMIDIPlayer, NSURL
+from rubicon.objc import Block
+from rubicon.objc.runtime import objc_id
 
 
 class TogaMIDIPlayer(AVMIDIPlayer):
@@ -6,11 +8,12 @@ class TogaMIDIPlayer(AVMIDIPlayer):
 
 
 class MIDIPlayer:
-    def __init__(self, interface, midi_data, sound_font):
+    def __init__(self, interface, midi_data, sound_font, loop):
         self.interface = interface
         self.interface._impl = self
         self.native = None
         self.midi_data = midi_data
+        self.loop = loop
         sound_font_url = None
         if isinstance(sound_font, NSURL):
             sound_font_url = sound_font
@@ -20,26 +23,34 @@ class MIDIPlayer:
         self.native.interface = self.interface
 
     def play(self):
-        self.native.play(None)
+        callback = None
+        if self.loop:
+            callback = Block(self.restart, None, objc_id)
+        self.native.play(callback)
 
     def stop(self):
         self.native.stop(None)
+
+    def restart(self, action: objc_id) -> None:
+        if self.native.currentPosition >= self.native.duration - 0.02:
+            self.native.currentPosition = 0
+            self.play()
 
     @property
     def rate(self):
         return self.native.rate
 
     @rate.setter
-    def rate(self, new_rate):
-        self.native.rate = new_rate
+    def rate(self, value):
+        self.native.rate = value
 
     @property
     def current_time(self):
         return float(self.native.currentPosition)
 
     @current_time.setter
-    def current_time(self, new_current_time):
-        self.native.currentPosition = new_current_time
+    def current_time(self, value):
+        self.native.currentPosition = value
 
     @property
     def duration(self):
