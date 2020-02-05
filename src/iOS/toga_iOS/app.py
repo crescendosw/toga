@@ -59,7 +59,10 @@ class PythonAppDelegate(UIResponder):
             object=None
         )
         # Set the initial keyboard size.
-        App.app.interface.main_window.content._impl.viewport.kb_height = 0.0
+        content_impl = App.app.interface.main_window.content._impl
+        viewport = getattr(content_impl, 'viewport', None)
+        if viewport:
+            viewport.kb_height = 0.0
 
         return True
 

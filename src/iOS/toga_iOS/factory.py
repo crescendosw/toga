@@ -14,6 +14,7 @@ from .widgets.detailedlist import DetailedList
 from .widgets.imageview import ImageView
 from .widgets.label import Label
 from .widgets.multilinetextinput import MultilineTextInput
+from .widgets.navigationview import NavigationView
 from .widgets.numberinput import NumberInput
 # from .widgets.optioncontainer import OptionContainer
 from .widgets.passwordinput import PasswordInput
@@ -58,6 +59,7 @@ __all__ = [
     'ImageView',
     'Label',
     'MultilineTextInput',
+    'NavigationView',
     'NumberInput',
     # 'OptionContainer',
     'PasswordInput',

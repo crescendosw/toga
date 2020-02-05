@@ -20,6 +20,7 @@ from .widgets.imageview import ImageView
 from .widgets.datepicker import DatePicker
 from .widgets.label import Label
 from .widgets.multilinetextinput import MultilineTextInput
+from .widgets.navigationview import NavigationView
 from .widgets.numberinput import NumberInput
 from .widgets.optioncontainer import OptionContainer
 from .widgets.passwordinput import PasswordInput
@@ -65,6 +66,7 @@ __all__ = [
     'Label',
     'DatePicker',
     'MultilineTextInput',
+    'NavigationView',
     'NumberInput',
     'OptionContainer',
     'PasswordInput',

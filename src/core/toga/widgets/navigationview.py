@@ -2,18 +2,19 @@ from .base import Widget
 
 
 class NavigationView(Widget):
-    def __init__(self, title, content, on_action=None, style=None):
-        super().__init__(title=title, content=content, on_action=on_action, style=style)
+    def __init__(self, root_widget, id=None, style=None, factory=None):
+        super().__init__(id=id, style=style, factory=factory)
+        self._impl = self.factory.NavigationView(root_widget._impl,
+                                                 interface=self)
 
-    def _configure(self, title, content, on_action):
-        self.title = title
-        self.content = [content]
-        self.on_action = on_action
+    def push(self, widget, animated=True):
+        self._impl.push(widget._impl, animated)
+        widget.refresh()
 
-    def push(self, content):
-        self.content.push(content)
-        self._push(content)
+    def refresh(self):
+        # TODO: Refresh child when popped?
+        self._impl.refresh()
 
-    def _pop(self):
-        self.content.pop()
-        self._pop()
+    def add(self, *children):
+        name = self.__class__.__name__
+        raise RuntimeError(f'Use push to add content to {name}')

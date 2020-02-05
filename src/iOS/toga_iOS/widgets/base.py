@@ -2,14 +2,18 @@ from toga_iOS.constraints import Constraints
 
 
 class Widget:
-    def __init__(self, interface):
+    def __init__(self, interface, is_root_controller = False):
         self.interface = interface
         self.interface._impl = self
         self._container = None
         self.constraints = None
         self.native = None
+        self.is_root_controller = is_root_controller
         self.create()
         self.interface.style.reapply()
+
+    def create(self):
+        raise RuntimeError('Must override abstract method Widget.create()')
 
     def set_app(self, app):
         pass
@@ -43,10 +47,11 @@ class Widget:
         else:
             viewport = self.viewport
 
-        self.constraints.update(
-            x, y + viewport.statusbar_height,
-            width, height
-        )
+        if self.constraints:
+            self.constraints.update(
+                x, y + viewport.statusbar_height,
+                width, height
+            )
 
     def set_alignment(self, alignment):
         pass

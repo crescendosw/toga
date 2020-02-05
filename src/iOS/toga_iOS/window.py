@@ -31,6 +31,7 @@ class Window:
     def __init__(self, interface):
         self.interface = interface
         self.interface._impl = self
+        self.controller = None
         self.create()
 
     def create(self):
@@ -38,19 +39,31 @@ class Window:
         self.native.interface = self.interface
 
     def set_content(self, widget):
+        if widget.is_root_controller:
+            widget.on_set_content()
+            self.controller = widget.native
+            self.native.rootViewController = self.controller
+        else:
+            if getattr(widget, 'controller', None):
+                view_controller = widget.controller
+            else:
+                view_controller = None
+
+            self.controller = self.configure_content(widget, view_controller)
+            self.native.rootViewController = self.controller
+
+    def configure_content(self, widget, view_controller=None):
         widget.viewport = iOSViewport(self.native)
+        if not view_controller:
+            view_controller = UIViewController.alloc().init()
 
         # Add all children to the content widget.
         for child in widget.interface.children:
             child._impl.container = widget
+            widget.native.addSubview(child._impl.native)
+        view_controller.view = widget.native
 
-        if getattr(widget, 'controller', None):
-            self.controller = widget.controller
-        else:
-            self.controller = UIViewController.alloc().init()
-
-        self.native.rootViewController = self.controller
-        self.controller.view = widget.native
+        return view_controller
 
     def set_title(self, title):
         pass

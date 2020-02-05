@@ -1,58 +1,55 @@
-from rubicon.objc import SEL, objc_method
-
-from toga.interface import NavigationView as NavigationViewInterface
-from toga_iOS.libs import (
-    UINavigationController,
-    UIBarButtonItem,
-    UIBarButtonSystemItemAdd,
-)
-from toga_iOS.widgets.base import WidgetMixin
+from ..libs import UINavigationController
+from ..libs import UIView
+from ..libs import NSNotificationCenter
+from .base import Widget
 
 
-def button_for_action(callback):
-    # if callback.icon == ...
-    return UIBarButtonSystemItemAdd
-
-
-class TogaNavigationController(UINavigationController):
-    # @objc_method
-    # def viewDidAppear_(self, animated: bool) -> None:
-    #     print("VIEW APPEARED", animated)
-    #     self.interface._update_layout()
-
-    @objc_method
-    def onAction(self):
-        if self.interface.on_action:
-            self.interface.on_action(self.interface)
-
-
-class NavigationView(NavigationViewInterface, WidgetMixin):
-    def __init__(self, title, content, on_action=None, style=None):
-        super().__init__(title=title, content=content, on_action=on_action, style=style)
-        self._create()
+class NavigationView(Widget):
+    def __init__(self, root_widget, interface):
+        super().__init__(interface, is_root_controller=True)
+        if not root_widget or not isinstance(root_widget.native, UIView):
+            name = self.__class__.__name__
+            raise RuntimeError(f'Invalid root_widget for {name}')
+        self.root_widget = root_widget
+        self.app = None
+        self.window = None
 
     def create(self):
-        self._controller = TogaNavigationController.alloc().initWithRootViewController_(
-            self._config['content']._controller
-        )
-        self._controller.interface = self
-        self._controller.navigationBar.topItem.title = self._config['title']
+        self.native = UINavigationController.alloc().init()
+        self.native.interface = self.interface
 
-        self._impl = self._controller.view
+    def on_set_content(self):
+        self.interface.push(self.root_widget.interface, animated=False)
 
-        if self._config['on_action']:
-            self._action_button = UIBarButtonItem.alloc().initWithBarButtonSystemItem_target_action_(
-                button_for_action(self._config['on_action']),
-                self._controller,
-                SEL('onAction')
-            )
-            self._controller.navigationBar.topItem.rightBarButtonItem = self._action_button
+    def push(self, widget, animated):
+        if not self.interface.window:
+            name = self.__class__.__name__
+            raise RuntimeError(f'Window content must be set to {name} '
+                               f'instance before calling push')
+        widget.interface.app = self.app
+        widget.interface.window = self.window
 
-        # Add the layout constraints
-        self._add_constraints()
+        widget.constraints = None
+        widget.native.translatesAutoresizingMaskIntoConstraints = True
 
-    def push(self, content):
-        self._controller.pushViewController_animated_(content._controller, True)
+        view_controller = self.interface.window._impl.configure_content(widget)
+        view_controller.title = getattr(widget.interface, 'title', '')
 
-    def pop(self, content):
-        self._controller.popViewController_animated_(True)
+        self.native.pushViewController_animated_(view_controller, animated)
+
+    def refresh(self):
+        pass
+
+    # TODO: What is '_impl.rehint'?
+    #      - toga.Button.rehint indicates that it has to do with resizing
+    #      - Sets self.interface.intrinsic.width
+    #      - The iOS _impl uses a viewport to add some vertical padding!!!
+    #      - *** How to determine the size of the top & bottom navigation controller elements?
+    #      - toga_iOS.ScrollContainer.constrain_to_scrollview, called by set_content, chops out various borders
+    #        - toga_iOS.ScrollContainer.update_content_size calls self.native.setContentSize_ to chop out borders
+    #      >>>>> What is an iOS container that chops out part of the UI
+    #        - the iOS Window chops out room for the keyboard & status bar
+    #        - the iOSViewport is what chops out the space - WHAT IS A VIEWPORT?
+    #        - The iOSViewport is also used by the ScrollContainer
+    # def rehint(self):
+    #     self.update_content_size()
