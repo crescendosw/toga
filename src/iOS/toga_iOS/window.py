@@ -1,5 +1,6 @@
 from toga_iOS import dialogs
 from toga_iOS.libs import UIApplication, UIScreen, UIViewController, UIWindow
+from rubicon.objc import objc_method
 
 
 class iOSViewport:
@@ -55,12 +56,13 @@ class Window:
     def configure_content(self, widget, view_controller=None):
         widget.viewport = iOSViewport(self.native)
         if not view_controller:
-            view_controller = UIViewController.alloc().init()
+            view_controller = ViewControllerWrapper.alloc().init()
 
         # Add all children to the content widget.
         for child in widget.interface.children:
             child._impl.container = widget
             widget.native.addSubview(child._impl.native)
+        view_controller._view_impl = widget # TODO: Hacky
         view_controller.view = widget.native
 
         return view_controller
@@ -100,3 +102,14 @@ class Window:
 
     def stack_trace_dialog(self, title, message, content, retry=False):
         self.interface.factory.not_implemented('Window.stack_trace_dialog()')
+
+
+class ViewControllerWrapper(UIViewController):
+    @objc_method
+    def willMoveToParentViewController_(self, parent) -> None:
+        # TODO: We should be calling the super class here
+        # super(self.__class__, self.__class__).willMoveToParentViewController_(parent)
+        if not parent:
+            on_close = getattr(self._view_impl.interface, 'on_close', None)
+            if on_close:
+                on_close()
