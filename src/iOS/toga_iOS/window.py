@@ -61,7 +61,7 @@ class Window:
         # Add all children to the content widget.
         for child in widget.interface.children:
             child._impl.container = widget
-            widget.native.addSubview(child._impl.native)
+
         view_controller._view_impl = widget # TODO: Hacky
         view_controller.view = widget.native
 
