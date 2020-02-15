@@ -11,8 +11,6 @@ class NavigationView(Widget):
             name = self.__class__.__name__
             raise RuntimeError(f'Invalid root_widget for {name}')
         self.root_widget = root_widget
-        self.app = None
-        self.window = None
 
     def create(self):
         self.native = UINavigationController.alloc().init()
@@ -26,8 +24,6 @@ class NavigationView(Widget):
             name = self.__class__.__name__
             raise RuntimeError(f'Window content must be set to {name} '
                                f'instance before calling push')
-        widget.interface.app = self.app
-        widget.interface.window = self.window
 
         widget.constraints = None
         widget.native.translatesAutoresizingMaskIntoConstraints = True

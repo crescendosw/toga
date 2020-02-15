@@ -8,6 +8,8 @@ class NavigationView(Widget):
                                                  interface=self)
 
     def push(self, widget, animated=True):
+        widget.app = self.app
+        widget.window = self.window
         self._impl.push(widget._impl, animated)
         widget.refresh()
 
