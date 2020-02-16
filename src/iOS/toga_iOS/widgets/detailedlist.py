@@ -46,6 +46,10 @@ class TogaTableViewController(UITableViewController):
         return cell
 
     @objc_method
+    def tableView_canEditRowAtIndexPath_(self, tableView, indexPath) -> bool:
+        return self.interface.on_delete is not None
+
+    @objc_method
     def tableView_commitEditingStyle_forRowAtIndexPath_(self, tableView, editingStyle: int, indexPath):
         if editingStyle == UITableViewCellEditingStyleDelete:
             item = self.interface.data.row(indexPath.row)
