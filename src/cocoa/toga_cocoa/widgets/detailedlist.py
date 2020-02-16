@@ -82,8 +82,7 @@ class TogaList(NSTableView):
         self.interface.selection = notification.object.selectedRow
         self.interface.selected = self.interface.data[notification.object.selectedRow]
         if self.interface.on_select:
-            row = notification.object.selectedRow if notification.object.selectedRow != -1 else None
-            self.interface.on_select(self.interface, row=row)
+            self.interface.on_select(self.interface, row=self.interface.selected)
 
 
 class DetailedList(Widget):

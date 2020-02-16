@@ -69,7 +69,7 @@ class TogaTableViewController(UITableViewController):
     @objc_method
     def tableView_willSelectRowAtIndexPath_(self, tableView, indexPath):
         if self.interface.on_select:
-            self.interface.on_select(self.interface, row=indexPath.row)
+            self.interface.on_select(self.interface, row=self.interface._data[indexPath.row])
 
     # @objc_method
     # def tableView_heightForRowAtIndexPath_(self, tableView, indexPath) -> float:
