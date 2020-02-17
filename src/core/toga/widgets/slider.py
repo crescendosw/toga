@@ -18,15 +18,17 @@ class Slider(Widget):
     """
     MIN_WIDTH = 100
 
-    def __init__(self, id=None, style=None, default=None, range=None, on_slide=None, enabled=True, factory=None):
+    def __init__(self, id=None, style=None, default=None, range=None, on_slide=None, on_press=None, enabled=True, factory=None):
         super().__init__(id=id, style=style, factory=factory)
         self._on_slide = None # needed for _impl initialization
+        self._on_press = None  # needed for _impl initialization
         self._impl = self.factory.Slider(interface=self)
 
         self.range = range
         if default:
             self.value = default
         self.on_slide = on_slide
+        self.on_press = on_press
         self.enabled = enabled
 
     @property
@@ -71,6 +73,20 @@ class Slider(Widget):
     def on_slide(self, handler):
         self._on_slide = wrapped_handler(self, handler)
         self._impl.set_on_slide(self._on_slide)
+
+    @property
+    def on_press(self):
+        """ The function for when the slider is touched
+
+        Returns:
+            The ``callable`` that is executed on slide.
+        """
+        return self._on_press
+
+    @on_press.setter
+    def on_press(self, handler):
+        self._on_press = wrapped_handler(self, handler)
+        self._impl.set_on_slide(self._on_press)
 
     @property
     def continuous(self):

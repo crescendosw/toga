@@ -1,7 +1,7 @@
 from rubicon.objc import objc_method, SEL, CGSize
 from travertino.size import at_least
 
-from toga_iOS.libs import UISlider, UIControlEventValueChanged
+from toga_iOS.libs import UISlider, UIControlEventValueChanged, UIControlEventTouchDown
 from toga_iOS.widgets.base import Widget
 
 
@@ -11,6 +11,11 @@ class TogaSlider(UISlider):
         if self.interface.on_slide:
             self.interface.on_slide(self.interface)
 
+    @objc_method
+    def onPress_(self, obj) -> None:
+        if self.interface.on_press:
+            self.interface.on_press(self.interface)
+
 
 class Slider(Widget):
     def create(self):
@@ -19,6 +24,7 @@ class Slider(Widget):
 
         self.native.continuous = True
         self.native.addTarget_action_forControlEvents_(self.native, SEL('onSlide:'), UIControlEventValueChanged)
+        self.native.addTarget_action_forControlEvents_(self.native, SEL('onPress:'), UIControlEventTouchDown)
 
         # Add the layout constraints
         self.add_constraints()
