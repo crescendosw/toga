@@ -26,6 +26,6 @@ class Box(Widget):
 
     def set_background_color(self, value):
         if value is None:
-            self.native.backgroundColor = UIColor.whiteColor
+            self.native.backgroundColor = UIColor.systemBackgroundColor()
         else:
             self.native.backgroundColor = native_color(value)
