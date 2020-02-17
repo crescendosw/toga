@@ -30,7 +30,7 @@ class Label(Widget):
             self.native.font = value._impl.native
 
     def set_text(self, value):
-        self.native.text = self.interface.text
+        self.native.text = value
 
     def rehint(self):
         # Width & height of a label is known and fixed.

@@ -17,14 +17,17 @@ class Button(Widget):
             implementation of this class with the same name. (optional & normally not needed)
     """
 
-    def __init__(self, label, id=None, style=None, on_press=None, enabled=True, factory=None):
+    def __init__(self, label, image=None, id=None, style=None, on_press=None, enabled=True, factory=None):
         super().__init__(id=id, enabled=enabled, style=style, factory=factory)
 
         # Create a platform specific implementation of a Button
         self._impl = self.factory.Button(interface=self)
 
         # Set all the properties
-        self.label = label
+        if label:
+            self.label = label
+        elif image:
+            self.image = image
         self.on_press = on_press
 
     @property
@@ -43,6 +46,14 @@ class Button(Widget):
             self._label = str(value)
         self._impl.set_label(value)
         self._impl.rehint()
+
+    def image(self, value):  # write-only property
+        self._image = value
+        if value:
+            value.bind(self.factory)
+            self._impl.set_image(value._impl)
+        self._impl.rehint()
+    image = property(None, image)
 
     @property
     def on_press(self):

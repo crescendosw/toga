@@ -33,6 +33,9 @@ class Button(Widget):
     def set_label(self, label):
         self.native.setTitle(self.interface.label, forState=UIControlStateNormal)
 
+    def set_image(self, image):
+        self.native.setImage_forState_(image.native.imageWithRenderingMode_(2), UIControlStateNormal)
+
     def set_on_press(self, handler):
         # No special handling required.
         pass
