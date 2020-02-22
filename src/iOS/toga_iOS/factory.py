@@ -7,6 +7,7 @@ from .icons import Icon
 from .images import Image
 from .paths import paths
 
+from.widgets.barbuttonitem import BarButtonItem
 from .widgets.box import Box
 from .widgets.button import Button
 from .widgets.canvas import Canvas
@@ -52,6 +53,7 @@ __all__ = [
     'paths',
 
     # Widgets
+    'BarButtonItem',
     'Box',
     'Button',
     'Canvas',
