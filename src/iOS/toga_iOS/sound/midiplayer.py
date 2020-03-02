@@ -3,7 +3,6 @@ from rubicon.objc import Block
 from rubicon.objc.runtime import objc_id
 
 
-
 class TogaMIDIPlayer(AVMIDIPlayer):
     pass
 
