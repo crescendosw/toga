@@ -24,10 +24,8 @@ class Button(Widget):
         self._impl = self.factory.Button(interface=self)
 
         # Set all the properties
-        if label:
-            self.label = label
-        elif image:
-            self.image = image
+        self.label = label
+        self.image = image
         self.on_press = on_press
 
     @property
