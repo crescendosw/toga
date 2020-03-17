@@ -5,7 +5,8 @@ from .base import Widget
 
 
 class NavigationView(Widget):
-    def __init__(self, root_widget, interface):
+    def __init__(self, root_widget, interface, bar_button_item=None):
+        self.bar_button_item = bar_button_item
         super().__init__(interface, is_root_controller=True)
         if not root_widget or not isinstance(root_widget.native, UIView):
             name = self.__class__.__name__
@@ -17,9 +18,9 @@ class NavigationView(Widget):
         self.native.interface = self.interface
 
     def on_set_content(self):
-        self.interface.push(self.root_widget.interface, animated=False)
+        self.interface.push(self.root_widget.interface, animated=False, back_button=False)
 
-    def push(self, widget, animated):
+    def push(self, widget, animated, back_button=True):
         if not self.interface.window:
             name = self.__class__.__name__
             raise RuntimeError(f'Window content must be set to {name} '
@@ -30,6 +31,9 @@ class NavigationView(Widget):
 
         view_controller = self.interface.window._impl.configure_content(widget)
         view_controller.title = getattr(widget.interface, 'title', '')
+        if self.bar_button_item and not back_button:
+            view_controller.navigationItem.leftBarButtonItem = self.bar_button_item
+        print(self.bar_button_item)
 
         self.native.pushViewController_animated_(view_controller, animated)
 
