@@ -45,13 +45,18 @@ class BarButtonItem(Widget):
         self._impl.set_label(value)
         self._impl.rehint()
 
-    def image(self, value):  # write-only property
+    @property
+    def image(self):
+        return 'yeet'
+
+    @image.setter
+    def image(self, value):
         self._image = value
         if value:
             value.bind(self.factory)
             self._impl.set_image(value._impl)
         self._impl.rehint()
-    image = property(None, image)
+
 
     @property
     def on_press(self):

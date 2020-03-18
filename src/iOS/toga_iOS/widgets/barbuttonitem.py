@@ -20,21 +20,11 @@ class TogaBarButtonItem(UIBarButtonItem):
 
 class BarButtonItem(Widget):
     def create(self):
-        self.native = TogaBarButtonItem.alloc().init()
+        self.native = TogaBarButtonItem.alloc().initWithImage_style_target_action_(self.interface.image.native.imageWithRenderingMode_(2), 0, self.native, SEL('onPress:'))
         self.native.interface = self.interface
-
-        self.native.setTitleColor(self.native.tintColor, forState=UIControlStateNormal)
-        self.native.setTitleColor(UIColor.grayColor, forState=UIControlStateDisabled)
-        self.native.addTarget(self.native, action=SEL('onPress:'), forControlEvents=UIControlEventTouchDown)
 
         # Add the layout constraints
         self.add_constraints()
-
-    def set_label(self, label):
-        self.native.setTitle(self.interface.label, forState=UIControlStateNormal)
-
-    def set_image(self, image):
-        self.native.setImage_forState_(image.native.imageWithRenderingMode_(2), UIControlStateNormal)
 
     def set_on_press(self, handler):
         # No special handling required.
