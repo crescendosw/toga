@@ -17,15 +17,13 @@ class BarButtonItem(Widget):
             implementation of this class with the same name. (optional & normally not needed)
     """
 
-    def __init__(self, label, image=None, id=None, style=None, on_press=None, enabled=True, factory=None):
-        super().__init__(id=id, enabled=enabled, style=style, factory=factory)
+    def __init__(self, image, id=None, on_press=None, factory=None):
+        self.image = image
+        #self.on_press = on_press
+        super().__init__(id=id, enabled=True, style=None, factory=factory)
 
         # Create a platform specific implementation of a Button
         self._impl = self.factory.BarButtonItem(interface=self)
-
-        # Set all the properties
-        self.label = label
-        self.image = image
         self.on_press = on_press
 
     @property
@@ -45,17 +43,17 @@ class BarButtonItem(Widget):
         self._impl.set_label(value)
         self._impl.rehint()
 
-    @property
-    def image(self):
-        return 'yeet'
-
-    @image.setter
-    def image(self, value):
-        self._image = value
-        if value:
-            value.bind(self.factory)
-            self._impl.set_image(value._impl)
-        self._impl.rehint()
+    # @property
+    # def image(self):
+    #     return 'yeet'
+    #
+    # @image.setter
+    # def image(self, value):
+    #     self._image = value
+    #     if value:
+    #         value.bind(self.factory)
+    #         self._impl.set_image(value._impl)
+    #     self._impl.rehint()
 
 
     @property

@@ -20,7 +20,7 @@ class TogaBarButtonItem(UIBarButtonItem):
 
 class BarButtonItem(Widget):
     def create(self):
-        self.native = TogaBarButtonItem.alloc().initWithImage_style_target_action_(self.interface.image.native.imageWithRenderingMode_(2), 0, self.native, SEL('onPress:'))
+        self.native = TogaBarButtonItem.alloc().initWithImage_style_target_action_(self.interface.image._impl.native, 0, self.native, SEL('onPress:'))
         self.native.interface = self.interface
 
         # Add the layout constraints
