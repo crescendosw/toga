@@ -6,6 +6,7 @@ from .base import Widget
 
 class NavigationView(Widget):
     def __init__(self, root_widget, interface, bar_button_item=None):
+        self.viewport = type('', (), {'kb_height': 100})
         self.bar_button_item = bar_button_item
         super().__init__(interface, is_root_controller=True)
         if not root_widget or not isinstance(root_widget.native, UIView):
