@@ -33,7 +33,6 @@ class NavigationView(Widget):
         view_controller.title = getattr(widget.interface, 'title', '')
         if self.bar_button_item and not back_button:
             view_controller.navigationItem.leftBarButtonItem = self.bar_button_item
-        print(self.bar_button_item)
 
         self.native.pushViewController_animated_(view_controller, animated)
 
