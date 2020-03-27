@@ -2,17 +2,24 @@ from ..libs import UINavigationController
 from ..libs import UIView
 from ..libs import NSNotificationCenter
 from .base import Widget
+from ..window import iOSViewport
+from toga_iOS.libs import UIScreen
 
 
 class NavigationView(Widget):
     def __init__(self, root_widget, interface, bar_button_item=None):
-        self.viewport = type('', (), {'kb_height': 100})
+        # self.set_bounds(UIScreen.mainScreen.bounds.origin.x,
+        #                 UIScreen.mainScreen.bounds.origin.y,
+        #                 UIScreen.mainScreen.bounds.size.width,
+        #                 UIScreen.mainScreen.bounds.size.height)
+        # self.viewport = iOSViewport(self)#type('', (), {'kb_height': 100})
         self.bar_button_item = bar_button_item
         super().__init__(interface, is_root_controller=True)
         if not root_widget or not isinstance(root_widget.native, UIView):
             name = self.__class__.__name__
             raise RuntimeError(f'Invalid root_widget for {name}')
         self.root_widget = root_widget
+        self._view_controllers = [self.root_widget]
 
     def create(self):
         self.native = UINavigationController.alloc().init()
@@ -34,11 +41,19 @@ class NavigationView(Widget):
         view_controller.title = getattr(widget.interface, 'title', '')
         if self.bar_button_item and not back_button:
             view_controller.navigationItem.leftBarButtonItem = self.bar_button_item
+        view_controller.nav_view = self
 
         self.native.pushViewController_animated_(view_controller, animated)
+        self._view_controllers.append(widget)
+
+    def on_back(self, view_controller):
+        assert self._view_controllers.pop() == view_controller
+        self._view_controllers.pop()
+
 
     def refresh(self):
-        pass
+        for view in self._view_controllers:
+            view.interface.refresh()
 
     # TODO: What is '_impl.rehint'?
     #      - toga.Button.rehint indicates that it has to do with resizing

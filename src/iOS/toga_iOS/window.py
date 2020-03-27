@@ -113,3 +113,4 @@ class ViewControllerWrapper(UIViewController):
             on_close = getattr(self._view_impl.interface, 'on_close', None)
             if on_close:
                 on_close()
+            self.nav_view.on_back(self)

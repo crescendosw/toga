@@ -16,6 +16,7 @@ class NavigationView(Widget):
     def refresh(self):
         # TODO: Refresh child when popped?
         self._impl.refresh()
+        pass
 
     def add(self, *children):
         name = self.__class__.__name__
