@@ -7,10 +7,10 @@ class NavigationView(Widget):
         self._impl = self.factory.NavigationView(root_widget._impl,
                                                  interface=self, bar_button_item=bar_button_item)
 
-    def push(self, widget, animated=True, back_button=True):
+    def push(self, widget, animated=True, right_bar_button_item=None, back_button=True):
         widget.app = self.app
         widget.window = self.window
-        self._impl.push(widget._impl, animated, back_button=back_button)
+        self._impl.push(widget._impl, animated, right_bar_button_item=right_bar_button_item, back_button=back_button)
         widget.refresh()
 
     def refresh(self):
