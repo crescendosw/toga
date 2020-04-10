@@ -19,7 +19,8 @@ class NavigationView(Widget):
             name = self.__class__.__name__
             raise RuntimeError(f'Invalid root_widget for {name}')
         self.root_widget = root_widget
-        self._view_controllers = [self.root_widget]
+        self._subviews = [self.root_widget]
+        self.view_controller = None
 
     def create(self):
         self.native = UINavigationController.alloc().init()
@@ -46,15 +47,16 @@ class NavigationView(Widget):
         view_controller.nav_view = self
 
         self.native.pushViewController_animated_(view_controller, animated)
-        self._view_controllers.append(widget)
+        self._subviews.append(widget)
+        self.view_controller = view_controller
 
     def on_back(self, view_controller):
-        assert self._view_controllers.pop() == view_controller
-        self._view_controllers.pop()
+        assert self._subviews.pop() == view_controller
+        self._subviews.pop()
 
 
     def refresh(self):
-        for view in self._view_controllers:
+        for view in self._subviews:
             view.interface.refresh()
 
     # TODO: What is '_impl.rehint'?
