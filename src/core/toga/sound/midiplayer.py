@@ -12,6 +12,9 @@ class MIDIPlayer:
     def stop(self):
         self._impl.stop()
 
+    def delete(self):
+        self._impl.delete()
+
     @property
     def rate(self):
         return self._impl.rate

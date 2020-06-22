@@ -21,3 +21,17 @@ class NavigationView(Widget):
     def add(self, *children):
         name = self.__class__.__name__
         raise RuntimeError(f'Use push to add content to {name}')
+
+    def back(self):
+        self._impl.back()
+
+    def set_parent_title(self, value):
+        self._impl.set_parent_title(value)
+
+    @property
+    def title(self):
+        return self._impl.title
+
+    @title.setter
+    def title(self, value):
+        self._impl.title = value

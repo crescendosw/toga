@@ -31,6 +31,9 @@ class MIDIPlayer:
     def stop(self):
         self.native.stop(None)
 
+    def delete(self):
+        self.native.release()
+
     def restart(self, action: objc_id) -> None:
         if self.native.currentPosition >= self.native.duration - 0.02:
             self.native.currentPosition = 0

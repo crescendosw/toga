@@ -41,9 +41,9 @@ class NavigationView(Widget):
         view_controller = self.interface.window._impl.configure_content(widget)
         view_controller.title = getattr(widget.interface, 'title', '')
         if right_bar_button_item:
-            view_controller.navigationItem.rightBarButtonItem = right_bar_button_item
+            view_controller.navigationItem.rightBarButtonItem = right_bar_button_item._impl.native
         if self.bar_button_item and not back_button:
-            view_controller.navigationItem.leftBarButtonItem = self.bar_button_item
+            view_controller.navigationItem.leftBarButtonItem = self.bar_button_item._impl.native
         view_controller.nav_view = self
 
         self.native.pushViewController_animated_(view_controller, animated)
@@ -54,10 +54,23 @@ class NavigationView(Widget):
         assert self._subviews.pop() == view_controller
         self._subviews.pop()
 
-
     def refresh(self):
         for view in self._subviews:
             view.interface.refresh()
+
+    def back(self):
+        self.native.popViewControllerAnimated(True)
+
+    def set_parent_title(self, value):
+        self.native.viewControllers[-2].title = value
+
+    @property
+    def title(self):
+        return self.native.topViewController.title
+
+    @title.setter
+    def title(self, value):
+        self.native.topViewController.title = value
 
     # TODO: What is '_impl.rehint'?
     #      - toga.Button.rehint indicates that it has to do with resizing
