@@ -2,9 +2,12 @@ from toga.platform import get_platform_factory
 
 
 class MIDIPlayer:
-    def __init__(self, midi_data, sound_font=None, factory=None, loop=False):
-        self.factory = get_platform_factory(factory)
-        self._impl = self.factory.MIDIPlayer(interface=self, midi_data=midi_data, sound_font=sound_font, loop=loop)
+    def __init__(self, midi_sample, sound_font=None):
+        self.factory = get_platform_factory()
+        self._impl = self.factory.MIDIPlayer(interface=self, midi_sample=midi_sample, sound_font=sound_font)
+
+    def set_sample(self, midi_sample, sound_font=None):
+        self._impl.set_sample(midi_sample, sound_font=sound_font)
 
     def play(self):
         self._impl.play()
