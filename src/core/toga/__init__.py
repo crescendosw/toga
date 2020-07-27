@@ -35,6 +35,7 @@ from .widgets.table import Table
 from .widgets.textinput import TextInput
 from .widgets.tree import Tree
 from .widgets.webview import WebView
+from .widgets.widgetlist import WidgetList
 from .window import Window
 
 from .sound.midiplayer import MIDIPlayer
@@ -82,6 +83,7 @@ __all__ = [
     'TextInput',
     'Tree',
     'WebView',
+    'WidgetList',
 
     # Sound
     'MIDIPlayer'
