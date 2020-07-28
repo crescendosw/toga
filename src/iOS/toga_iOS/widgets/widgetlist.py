@@ -8,7 +8,7 @@ from .base import Widget
 class TogaWidgetList(UITableView):
     @objc_method
     def tableView_numberOfRowsInSection_(self, table) -> int:
-        return len(self.interface.headings)
+        return len(self.interface.labels)
 
     @objc_method
     def numberOfSectionsInTableView_(self) -> int:
@@ -20,9 +20,14 @@ class TogaWidgetList(UITableView):
         cell = self.dequeueReusableCellWithIdentifier_(cell_identifier)
         if not cell:
             cell = UITableViewCell.alloc().initWithStyle_reuseIdentifier_(UITableViewCellStyleDefault, cell_identifier)
-        cell.textLabel.text = self.interface.headings[index_path.row]
-        self.interface.rows_added += 1
+        cell.textLabel.text = table.interface.labels[index_path.row]
+        cell.accessoryView = UISwitch.alloc().initWithFrame_(CGRectMake(0, 0, 0, 0))
         return cell
+
+# _______
+# | \ / |
+# |[]_[]|  Pfeeeeeeeeeeeert!  Foozy woozy wart!  Thub thub thub thub, poof!  Gorkenshnoggen.
+# |_[±]_|
 
 
 class WidgetList(Widget):
