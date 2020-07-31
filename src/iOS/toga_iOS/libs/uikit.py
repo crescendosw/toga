@@ -361,6 +361,12 @@ UITableViewCellEditingStyleInsert = 2
 UITableViewCellSeparatorStyleNone = 0
 UITableViewCellSeparatorStyleSingleLine = 1
 
+UITableViewCellAccessoryNone = 0
+UITableViewCellAccessoryDisclosureIndicator = 1
+UITableViewCellAccessoryDetailDisclosureButton = 2
+UITableViewCellAccessoryCheckmark = 3
+UITableViewCellAccessoryDetailButton = 4
+
 ######################################################################
 # UITextField.h
 UITextField = ObjCClass('UITextField')
