@@ -28,7 +28,6 @@ class TogaWidgetList(UITableView):
         if not cell:
             cell = UITableViewCell.alloc().initWithStyle_reuseIdentifier_(UITableViewCellStyleValue1, cell_identifier)
         cell.textLabel.text = table.interface.data[index_path.row]['title']
-        print(table.interface.checkmark)
         if table.interface.checkmark is None:
             cell.detailTextLabel.text = table.interface.data[index_path.row]['label']
             accessory = table.interface.data[index_path.row]['widget']
