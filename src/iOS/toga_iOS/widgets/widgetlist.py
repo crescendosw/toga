@@ -57,7 +57,7 @@ class TogaWidgetList(UITableView):
 
     @objc_method
     def tableView_didSelectRowAtIndexPath_(self, table, index_path):
-        if table.interface.checkmark:
+        if table.interface.checkmark is not None:
             for i in range(len(table.interface.data)):
                 index = ObjCClass('NSIndexPath').indexPathForRow_inSection_(i, 0)
                 table.cellForRowAtIndexPath_(index).accessoryType = UITableViewCellAccessoryNone
